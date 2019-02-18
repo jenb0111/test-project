@@ -28,51 +28,65 @@
 </template>
 
 <script>
+import db from '@/fb'
 export default {
   data() {
     return {
       projects: [
-        {
-          title: "Design a new website",
-          person: "Plaifah Atthapaibul",
-          duedate: "Jan 11th, 2019",
-          status: "ongoing",
-          content:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet ipsam voluptatibus harum aspernatur saepe quod minima quibusdam voluptate corporis asperiores consectetur vero assumenda blanditiis possimus veniam officia, odio aut consequuntur."
-        },
-        {
-          title: "Coding",
-          person: "Do Minjun",
-          duedate: "Jan 1st, 2019",
-          status: "complete",
-          content:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet ipsam voluptatibus harum aspernatur saepe quod minima quibusdam voluptate corporis asperiores consectetur vero assumenda blanditiis possimus veniam officia, odio aut consequuntur."
-        },
-        {
-          title: "Design xxx",
-          person: "Natcha Likitrungsan",
-          duedate: "March 8th, 2019",
-          status: "complete",
-          contend:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet ipsam voluptatibus harum aspernatur saepe quod minima quibusdam voluptate corporis asperiores consectetur vero assumenda blanditiis possimus veniam officia, odio aut consequuntur."
-        },
-        {
-          title: "Create a community forum",
-          person: "Im Jaebum",
-          duedate: "Jan 6th, 2019",
-          status: "overdue",
-          content:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet ipsam voluptatibus harum aspernatur saepe quod minima quibusdam voluptate corporis asperiores consectetur vero assumenda blanditiis possimus veniam officia, odio aut consequuntur."
-        }
+        // {
+        //   title: "Design a new website",
+        //   person: "Plaifah Atthapaibul",
+        //   duedate: "Jan 11th, 2019",
+        //   status: "ongoing",
+        //   content:
+        //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet ipsam voluptatibus harum aspernatur saepe quod minima quibusdam voluptate corporis asperiores consectetur vero assumenda blanditiis possimus veniam officia, odio aut consequuntur."
+        // },
+        // {
+        //   title: "Coding",
+        //   person: "Do Minjun",
+        //   duedate: "Jan 1st, 2019",
+        //   status: "complete",
+        //   content:
+        //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet ipsam voluptatibus harum aspernatur saepe quod minima quibusdam voluptate corporis asperiores consectetur vero assumenda blanditiis possimus veniam officia, odio aut consequuntur."
+        // },
+        // {
+        //   title: "Design xxx",
+        //   person: "Natcha Likitrungsan",
+        //   duedate: "March 8th, 2019",
+        //   status: "complete",
+        //   contend:
+        //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet ipsam voluptatibus harum aspernatur saepe quod minima quibusdam voluptate corporis asperiores consectetur vero assumenda blanditiis possimus veniam officia, odio aut consequuntur."
+        // },
+        // {
+        //   title: "Create a community forum",
+        //   person: "Im Jaebum",
+        //   duedate: "Jan 6th, 2019",
+        //   status: "overdue",
+        //   content:
+        //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet ipsam voluptatibus harum aspernatur saepe quod minima quibusdam voluptate corporis asperiores consectetur vero assumenda blanditiis possimus veniam officia, odio aut consequuntur."
+        // }
       ]
     }
   },
   computed: {
     myProjects() {
       return this.projects.filter(project => {
-        return project.person === 'Plaifah Atthapaibul'
+        return project.person === 'Do Minjun'
       })
     }
+  },
+  created() {
+    db.collection('projects').onSnapshot(res => {
+      const changes = res.docChanges()
+      changes.forEach(change => {
+        if (change.type === 'added') {
+          this.projects.push({
+            ...change.doc.data(),
+            id: change.doc.id
+          })
+        }
+      })
+    })
   }
 };
 </script>
